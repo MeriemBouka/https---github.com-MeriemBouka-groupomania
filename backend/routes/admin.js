@@ -7,5 +7,6 @@ const multer = require("../middleware/multer-config");
 
 
 router.delete("/:id", adminAuth, multer, adminCtrl.deletePostAdmin);
+router.put("/:id", adminAuth, multer, adminCtrl.updatePostAdmin);
 
 module.exports = router;
