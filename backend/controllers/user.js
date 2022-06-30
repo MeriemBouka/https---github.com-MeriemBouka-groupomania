@@ -9,7 +9,8 @@ exports.signup = (req, res, next) => {
       const user = new User({
         email: req.body.email,
         password: hash,
-        login: req.body.login
+        login: req.body.login,
+        isAdmin : req.body.isAdmin
       });
       user
         .save()
