@@ -1,8 +1,10 @@
+import React from "react"
 import styled from "styled-components"
 import imageProfil from "../assets/0b40b35a17822a88bb6baa8f8b4ce32a.jpg"
 import colors from "../../src/utils/colors"
 
 const ProfileCard = styled.aside`
+flex: 4;
 width : 20rem;
 height : 270px;
 border-radius: 1.5rem;
