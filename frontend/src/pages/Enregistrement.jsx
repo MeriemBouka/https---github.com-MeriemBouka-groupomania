@@ -1,7 +1,9 @@
-import React from "react"
+import React, {useRef} from "react"
 import styled from "styled-components"
 import Logo from "../assets/icon-left-font.svg"
 import colors from "../utils/colors"
+import  { useNavigate } from "react-router-dom"
+import axios from "axios"
 
 const LogIn = styled.div`
 width: 100vw; 
@@ -35,7 +37,7 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 `
-const LoginBox = styled.div`
+const LoginBox = styled.form`
 height: 350px;
 padding: 20px;
 background-color: ${colors.secondaire};
@@ -75,6 +77,29 @@ transition: 200ms;
 `
 
 export default function Enregistrement(){
+    const login = useRef();
+    const email = useRef();
+    const password = useRef();
+    const navigate = useNavigate();
+
+    const handleClick = async (e) =>{
+        e.preventDefault();
+
+        const user ={
+            login: login.current.value,
+            email: email.current.value,
+            password: password.current.value,
+        }
+        try{
+            await axios.post("http://localhost:3000/api/auth/signup", user);
+            navigate("/login")
+        }
+        catch(error){
+            console.log(error)
+        }
+        
+    };
+
     return(
         <LogIn>
             <LoginWrapp>
@@ -82,11 +107,11 @@ export default function Enregistrement(){
                     <LoginLogo src={Logo} alt="Logo Groupomania"/>
                 </LoginGauche>
                 <LoginDroit>
-                    <LoginBox>
-                        <EmailMdp placeholder="Nom d'utilisateur"/>
-                        <EmailMdp placeholder="Email"/>
-                        <EmailMdp placeholder="Mot de passe"/>
-                        <LoginButton>S'inscrire</LoginButton>
+                    <LoginBox onSubmit={handleClick}>
+                        <EmailMdp placeholder="Nom d'utilisateur" ref={login} />
+                        <EmailMdp type="email"placeholder="Email" ref={email} required/>
+                        <EmailMdp type="password" placeholder="Mot de passe" minLength="6" ref={password} required/>
+                        <LoginButton type="submit">S'inscrire</LoginButton>
                         <LoginEnregistrementBtn>
                             Se connecter
                         </LoginEnregistrementBtn>

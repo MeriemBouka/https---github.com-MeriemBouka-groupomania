@@ -1,20 +1,21 @@
-import React from 'react'
-import ReactDOM from "react-dom/client"
-import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import React,{useContext} from 'react'
+import { BrowserRouter as Router,Routes,Route, Navigate} from 'react-router-dom'
 import Enregistrement from"./pages/Enregistrement.jsx"
 import Login from "./pages/Login"
 import Home from "./pages/Home"
+import {AuthContext} from "./components/context/AuthContext"
 
 function App() {
+  const {user} = useContext(AuthContext)
   return(
     <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<Home />}>
+        <Route exact path="/" element={user ? <Home /> : <Enregistrement/>}>
         </Route>
-        <Route path="/signup" element={<Enregistrement />}>
+        <Route path="/signup" element={user ? <Navigate to ="/" /> : <Enregistrement />}>
         </Route>
-        <Route path="/login" element={<Login />}>
+        <Route path="/login" element={user ? <Navigate to ="/" /> : <Login />}>
         </Route>
       </Routes>
     </Router>

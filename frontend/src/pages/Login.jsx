@@ -1,7 +1,9 @@
-import React from "react"
+import React, {useRef, useContext} from "react"
 import styled from "styled-components"
 import Logo from "../assets/icon-left-font.svg"
 import colors from "../utils/colors"
+import {loginCall} from "../../src/apiCalls"
+import {AuthContext} from "../components/context/AuthContext"
 
 const LogIn = styled.div`
 width: 100vw; 
@@ -35,7 +37,7 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 `
-const LoginBox = styled.div`
+const LoginBox = styled.form`
 height: 300px;
 padding: 20px;
 background-color: ${colors.secondaire};
@@ -63,14 +65,30 @@ color: ${colors.blanc};
 font-size: 12pt;
 font-weight: 700;
 cursor: pointer;
+&:hover{
+        opacity: 0.7;
+}
 `
 const LoginEnregistrementBtn = styled(LoginButton)`
-background-color: #64af30;
+background-color: ${colors.tertiaire};
 width: 200px; 
 align-self: center; 
+transition: 200ms;
 `
 
 export default function Login(){
+    const email = useRef();
+    const password = useRef();
+    const {user, isFetching, error, dispatch} = useContext(AuthContext);
+
+    const handleClick = async (e) =>{
+        e.preventDefault();
+        loginCall({email:email.current.value, password:password.current.value}, dispatch )
+        
+    };
+
+    console.log(user);
+
     return(
         <LogIn>
             <LoginWrapp>
@@ -78,9 +96,9 @@ export default function Login(){
                     <LoginLogo src={Logo} alt="Logo Groupomania"/>
                 </LoginGauche>
                 <LoginDroit>
-                    <LoginBox>
-                        <EmailMdp placeholder="Email"/>
-                        <EmailMdp placeholder="Mot de passe"/>
+                    <LoginBox onSubmit={handleClick}>
+                        <EmailMdp  placeholder="Email" ref={email} required/>
+                        <EmailMdp type="password" placeholder="Mot de passe"  ref={password} required/>
                         <LoginButton>Se connecter</LoginButton>
                         <LoginEnregistrementBtn>
                             Créer un nouveau compte

@@ -1,14 +1,28 @@
 const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
+const helmet = require("helmet");
+require("dotenv").config();
 
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const adminRoutes = require("./routes/admin");
 
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", " img-src 'self' data:");
+  next();
+});
+
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: false,
+  })
+);
+
 mongoose
-  .connect(
-    "mongodb+srv://groupo:groupomania2022@cluster0.oyobg.mongodb.net/?retryWrites=true&w=majority",
+  .connect
+    (process.env.MONGO_URI,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -16,7 +30,7 @@ mongoose
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
-const app = express();
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
