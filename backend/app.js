@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
-const adminRoutes = require("./routes/admin");
+const usersRoutes = require("./routes/users");
 
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", " img-src 'self' data:");
@@ -47,11 +47,10 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use("/images", express.static(path.join(__dirname, "images")));
-
 app.use("/api/publication", postRoutes);
 app.use("/api/auth", userRoutes);
-app.use("/api/admin", adminRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 
 module.exports = app;

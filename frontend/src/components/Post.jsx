@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 import styled from "styled-components"
 import { faEllipsisVertical, faHeart, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProfilImg from "../assets/20456790.png" 
-import Fleur from "../assets/fleur.png"
+import ProfilImg from "../assets/profil.png" 
 import colors from "../utils/colors"
+import axios from "axios"
+import {format} from "timeago.js"
+import {AuthContext} from "../components/context/AuthContext"
+
+
 
 const Poster = styled.div`
 width: 100%;
@@ -66,36 +70,64 @@ align-items: center;
 const PostCompteur = styled.span`
 
 `
-const PostBasDroit = styled.div`
-border-bottom-style: dotted;
-cursor : pointer;
-`
-export default function Post(){
+export default function Post({post}){
+    const [user, setUser] = useState({})
+    const[like, setLike] = useState(post.likes.length)
+    const[isLiked, setIsLiked] = useState(false)
+    const {user:currentUser} = useContext(AuthContext)
+
+
+    useEffect(() =>{
+        setIsLiked(post.likes.includes(currentUser.userId))
+    },[currentUser.id, post.likes])
+
+     useEffect(()=>{
+    const fetchUser = async () =>{
+       const res = await axios.get(`users/${post.userId}`)
+       setUser(res.data);
+        };
+       fetchUser();
+    },[post.userId]);
+    const likeHandler= () =>{
+        try{
+            const tokenAcces = currentUser.token;
+            axios.put("/publication/"+post._id+"/like",{ userId: currentUser.userId},{
+  headers: {
+    'Authorization': "Bearer "+ tokenAcces,
+    "Content-Type": "application/json"
+  }
+  });
+        }
+        catch(err){}
+
+        setLike(isLiked ? like-1 : like+1)
+        setIsLiked(!isLiked)
+    }
+
     return(
         <Poster>
             <PostWrapp>
                 <PostHaut>
                     <PostHautGauche>
-                        <PostImgProfil src={ProfilImg} alt="Image du propriètaire de la publication" />
-                        <PostLogin>Login</PostLogin>
-                        <PostDate>1 jour</PostDate>
+                        <PostImgProfil src={user.userImg  || `${ProfilImg}` }alt="Image du propriètaire de la publication" />
+                        <PostLogin>{user.login}</PostLogin>
+                        <PostDate >{format(post.creationDate)}</PostDate>
                     </PostHautGauche>
                 
                 <PostHautDroit>
-                    <FontAwesomeIcon icon={faEllipsisVertical} size="lg" />
+                         {/* supprimer / modifier */}
                 </PostHautDroit>
                 </PostHaut>
                 <PostCentre>
-                    <PostText>Bonne journée à toutes et à tous !!!</PostText>
-                    <PostImg src={Fleur} alt="image postée" />
+                    <PostText>{post.text}</PostText>
+                    <PostImg src={post.imgUrl} alt="image postée" />
                 </PostCentre>
                 <PostBas>
                     <PostBasGauche>
-                        <FontAwesomeIcon icon={faThumbsUp} size="lg" style={{ color: `${colors.tertiaire}`, cursor: 'pointer', marginRight:'15px' }}/>
-                        <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: `red` }}/>
-                        <PostCompteur>30M</PostCompteur>
+                        <FontAwesomeIcon icon={faThumbsUp} size="lg" style={{ color: `${colors.tertiaire}`, cursor: 'pointer', marginRight:'15px' }} onClick={likeHandler}/>
+                        <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: `red` }}onClick={likeHandler}/>
+                        <PostCompteur>{like}</PostCompteur>
                     </PostBasGauche>
-                    <PostBasDroit>3 commentaires</PostBasDroit>
                 </PostBas>
             </PostWrapp>
         </Poster>

@@ -1,8 +1,8 @@
-import React, {useRef} from "react"
+import React, {useRef, useState} from "react"
 import styled from "styled-components"
 import Logo from "../assets/icon-left-font.svg"
 import colors from "../utils/colors"
-import  { useNavigate } from "react-router-dom"
+import  { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 
 const LogIn = styled.div`
@@ -56,6 +56,12 @@ padding-left: 20px;
     outline: none;
 }
 `
+const ErrorMsg = styled.div `
+color :red;
+font-weight : 700;`
+
+const ErrorMdp = styled(ErrorMsg)``
+
 const LoginButton = styled.button`
 height: 50px;
 border-radius: 10px;
@@ -77,28 +83,58 @@ transition: 200ms;
 `
 
 export default function Enregistrement(){
+    const regex =  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const [error, setError]= useState('');
+    const [mail, setMail] = useState('');
+    const [msg, setMsg]= useState('');
+    const [mdp, setMdp]= useState('');
     const login = useRef();
     const email = useRef();
     const password = useRef();
     const navigate = useNavigate();
+    
+    const validEmail = (e) =>{
+        setMail(e.target.value);
+        if(regex.test(mail)=== false ){
+            setError('Adresse mail non valide ! ')
+        }else{
+            setError('');
+            return true;
+        }
+    }
+
 
     const handleClick = async (e) =>{
         e.preventDefault();
-
         const user ={
             login: login.current.value,
             email: email.current.value,
             password: password.current.value,
         }
         try{
-            await axios.post("http://localhost:3000/api/auth/signup", user);
+            await axios.post("/auth/signup", user);
             navigate("/login")
         }
         catch(error){
-            console.log(error)
+            console.log(error.message)
+            if(error.message ===('Request failed with status code 400')){
+                setMsg('Adresse déjà existante !')
+            }
+            console.log(error.response.data.message)
+            if(error.response.data.message === ('Mot de passe non sécurisé !')){
+                setMdp("Mot de passe non sécurisé ! ")
+            }
+            
         }
         
     };
+
+    let erreur; 
+    if(error){
+       erreur= <ErrorMsg>{error}</ErrorMsg>; 
+    }else if(msg){
+        erreur= <ErrorMsg>{msg}</ErrorMsg>;
+    }
 
     return(
         <LogIn>
@@ -108,13 +144,16 @@ export default function Enregistrement(){
                 </LoginGauche>
                 <LoginDroit>
                     <LoginBox onSubmit={handleClick}>
-                        <EmailMdp placeholder="Nom d'utilisateur" ref={login} />
-                        <EmailMdp type="email"placeholder="Email" ref={email} required/>
-                        <EmailMdp type="password" placeholder="Mot de passe" minLength="6" ref={password} required/>
+                        <EmailMdp placeholder="Nom d'utilisateur" ref={login} required/>
+                        <EmailMdp type="email"placeholder="Email" ref={email} onChange={validEmail} required/>
+                        <ErrorMsg>{erreur}</ErrorMsg>
+                        <EmailMdp type="password" placeholder="Mot de passe" minLength="8" ref={password} required/>
+                        <ErrorMdp>{mdp}</ErrorMdp>
                         <LoginButton type="submit">S'inscrire</LoginButton>
-                        <LoginEnregistrementBtn>
-                            Se connecter
+                        <LoginEnregistrementBtn onClick={ navigate("/login")}>
+                           <Link to ="/login" style={{color:"white", textDecoration:"none"}}>Se connecter</Link> 
                         </LoginEnregistrementBtn>
+                        
                     </LoginBox>
                 </LoginDroit>
             </LoginWrapp>

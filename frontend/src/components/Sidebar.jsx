@@ -47,20 +47,14 @@ const ProfileCardElements = styled.div `
  gap : 2rem;
  text-align:center;`
 
-const ProfileCardLink = styled.div `
+const ProfileCardLinkBlack= styled.div `
 color : ${colors.primaire};
 text-decoration : none;
 padding-bottom: 30px;
+font-size : 14pt;
 &:hover{
     color : ${colors.secondaire};
 }`
-
-const ProfileCardLinkBlack = styled(ProfileCardLink) `
-color :black;
-&:hover{
-    color : ${colors.tertiaire};
-}`
-
 
 export default function Sidebar(){
     return (
@@ -71,7 +65,6 @@ export default function Sidebar(){
     <ProfileCardInfo>
             <Login>Login</Login>
         <ProfileCardElements>
-            <ProfileCardLink href="#" title="lien pour atteindre mon profil">Mon profil</ProfileCardLink>
             <ProfileCardLinkBlack href="#" title="lien pour me déconnecter">Déconnexion</ProfileCardLinkBlack>
         </ProfileCardElements>
     </ProfileCardInfo>

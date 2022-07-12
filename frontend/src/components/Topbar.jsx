@@ -1,10 +1,10 @@
 import React from 'react' 
-import "./topbar.css"
 import styled from 'styled-components'
-import colors from '../../utils/colors' 
-import logo from '../../assets/icon-left-font-monochrome-white.svg'
+import colors from '../utils/colors' 
+import logo from '../assets/icon-left-font-monochrome-white.svg'
 import { faArrowRightFromBracket, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {Link} from "react-router-dom"
 
 const Header = styled.header`
 max-width:100%;
@@ -34,15 +34,19 @@ const Blur = styled.div`
 `
 
 export default function Topbar(){
+  const handler = () =>{
+  localStorage.clear();
+   window.location.reload();
+  }
 return(
     <nav className="topbarContainer">
         <div className="topbarLeft">
            <Header>
+            <Link to="/">
               <Logo src={logo} alt="logo Groupomania"/>
-              <Menu>
-                <FontAwesomeIcon icon={faHouse} size="lg" style={{cursor:'pointer'}}/>
-                <FontAwesomeIcon icon={faUser} size="lg" style={{cursor:'pointer'}}/>
-                <FontAwesomeIcon icon={faArrowRightFromBracket} size="lg" style={{cursor:'pointer'}}/>
+            </Link>
+              <Menu>               
+                <FontAwesomeIcon icon={faArrowRightFromBracket} size="lg" style={{cursor:'pointer'}} onClick={handler}/>
               </Menu>
           </Header> 
              <Blur style ={{top : '36%', right:'-8'}}></Blur>

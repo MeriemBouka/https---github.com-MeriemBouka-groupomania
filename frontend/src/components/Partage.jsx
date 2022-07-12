@@ -1,9 +1,12 @@
-import React from "react"
+import React, {useContext, useRef, useState} from "react"
 import styled from "styled-components"
-import ProfileImg from "../../src/assets/0b40b35a17822a88bb6baa8f8b4ce32a.jpg" 
+import profileImg from "../../src/assets/profil.png"
 import { faImages } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import colors from "../utils/colors"
+import {AuthContext} from "./context/AuthContext"
+import FormData from 'form-data'
+import axios from "axios"
 
 
 const Partager = styled.div`
@@ -14,7 +17,7 @@ box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 background-color : ${colors.blanc};
 margin-top: 30px;
 `
-const PartageWrap = styled.div`
+const PartageWrap = styled.form`
 padding :10px;
 `
 const PartageTop = styled.div`
@@ -45,7 +48,7 @@ justify-content : space-between;
 const PartageHr = styled.hr`
 margin : 20px;
 `
-const PartageOption = styled.div`
+const PartageOption = styled.label`
 display: flex;
 align-items: center;
 margin-left: 15px;
@@ -71,23 +74,25 @@ color: ${colors.primaire};
 `
 
 export default function Partage(){
+    const {user} = useContext(AuthContext)
+    const text = useRef();
     return(
         <Partager>
             <PartageWrap>
                 <PartageTop>
-                    <ImgProfile src={ProfileImg} alt="" />
-                    <PartageInput placeholder="Quoi de neuf ?" />
+                    <ImgProfile src={user.imgUrl ? user.imgUrl : profileImg} alt="" />
+                    <PartageInput placeholder={"Quoi de neuf "+ user.login+"?" }ref={text}/>
                 </PartageTop>
                 <PartageHr/>
                 <PartageBottom>
-                    <PartageOption>
+                    <PartageOption htmlFor="file">
                             <FontAwesomeIcon icon={faImages} size="2x" style={{ color: `${colors.primaire}` }}/>
                             <PartageOptionText>Photo</PartageOptionText>
+                            <input type="file" id="file" accept=".png, .jpeg, .jpg" style={{display:"none"}}/>
                     </PartageOption>
-                    <PartageBoutton>Publier</PartageBoutton>
+                    <PartageBoutton type="submit">Publier</PartageBoutton>
                 </PartageBottom>
             </PartageWrap>
         </Partager>
-    
     )
 }

@@ -1,5 +1,5 @@
 import React from "react"
-import Topbar from "../components/topbar/Topbar"
+import Topbar from "../components/Topbar"
 import Sidebar from "../components/Sidebar"
 import Feed from "../components/Feed"
 import styled from "styled-components"

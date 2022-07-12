@@ -1,4 +1,3 @@
-import React from "react"
 
 const AuthReducer = (state, action) =>{
     switch(action.type){

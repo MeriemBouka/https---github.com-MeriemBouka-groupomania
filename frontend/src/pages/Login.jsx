@@ -4,6 +4,7 @@ import Logo from "../assets/icon-left-font.svg"
 import colors from "../utils/colors"
 import {loginCall} from "../../src/apiCalls"
 import {AuthContext} from "../components/context/AuthContext"
+import { Link } from 'react-router-dom'
 
 const LogIn = styled.div`
 width: 100vw; 
@@ -79,15 +80,16 @@ transition: 200ms;
 export default function Login(){
     const email = useRef();
     const password = useRef();
-    const {user, isFetching, error, dispatch} = useContext(AuthContext);
+    const {isFetching, dispatch} = useContext(AuthContext);
 
     const handleClick = async (e) =>{
         e.preventDefault();
-        loginCall({email:email.current.value, password:password.current.value}, dispatch )
+        loginCall(
+            {email:email.current.value, password:password.current.value}, 
+            dispatch )
         
     };
 
-    console.log(user);
 
     return(
         <LogIn>
@@ -99,10 +101,12 @@ export default function Login(){
                     <LoginBox onSubmit={handleClick}>
                         <EmailMdp  placeholder="Email" ref={email} required/>
                         <EmailMdp type="password" placeholder="Mot de passe"  ref={password} required/>
-                        <LoginButton>Se connecter</LoginButton>
+                        <LoginButton type="submit">Se connecter</LoginButton>
+                        
                         <LoginEnregistrementBtn>
-                            Créer un nouveau compte
+                           <Link to="/signup" style={{textDecoration:"none",color:`${colors.blanc}`}}>Créer un nouveau compte</Link>
                         </LoginEnregistrementBtn>
+                        
                     </LoginBox>
                 </LoginDroit>
             </LoginWrapp>

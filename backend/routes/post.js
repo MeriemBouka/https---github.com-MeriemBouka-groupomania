@@ -9,10 +9,10 @@ const like = require("../controllers/like");
 
 router.post("/",auth,multer, postCtrl.createPost);
 router.put("/:id",adminAuth, postCtrl.updatePost);
-router.delete("/:id", adminAuth, multer, postCtrl.deletePost);
+router.delete("/:id",auth, adminAuth, multer, postCtrl.deletePost);
 router.get("/:id",auth, postCtrl.getOnePost);
 router.get("/",auth, postCtrl.getAllPosts);
-router.post("/:id/like",auth, like.likePost);
+router.put("/:id/like",auth, like.likePost);
 
 
 module.exports = router;

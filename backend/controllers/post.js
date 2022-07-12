@@ -4,11 +4,12 @@ const fs = require("fs");
 exports.createPost = (req, res, next) => {
   const postObject = JSON.parse(req.body.post);
   delete postObject._id;
+  delete postObject._userId
   const post = new Post({
     ...postObject,
+    userId: req.auth.userId,
     imgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
   });
-  post.comments.push[postObject.comments];
   post
     .save()
     .then(() => res.status(201).json({ message: "Publication enregistrée !" }))
