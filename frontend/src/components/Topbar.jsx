@@ -34,7 +34,7 @@ const Blur = styled.div`
 `
 
 export default function Topbar(){
-  const handler = () =>{
+  const deconnexion = () =>{
   localStorage.clear();
    window.location.reload();
   }
@@ -46,7 +46,7 @@ return(
               <Logo src={logo} alt="logo Groupomania"/>
             </Link>
               <Menu>               
-                <FontAwesomeIcon icon={faArrowRightFromBracket} size="lg" style={{cursor:'pointer'}} onClick={handler}/>
+                <FontAwesomeIcon icon={faArrowRightFromBracket} size="lg" style={{cursor:'pointer'}} onClick={deconnexion}/>
               </Menu>
           </Header> 
              <Blur style ={{top : '36%', right:'-8'}}></Blur>
