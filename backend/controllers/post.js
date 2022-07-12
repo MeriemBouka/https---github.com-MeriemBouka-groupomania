@@ -3,17 +3,18 @@ const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
   const postObject = JSON.parse(req.body.post);
+  console.log(req.body.post);
   delete postObject._id;
   delete postObject._userId
   const post = new Post({
     ...postObject,
-    userId: req.auth.userId,
+    // userId: req.auth.userId,
     imgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
   });
   post
     .save()
     .then(() => res.status(201).json({ message: "Publication enregistrée !" }))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(400).json( {error,  message: 'Vous ne pouvez pas publier un post'} ));
 };
 
 exports.getOnePost = (req, res, next) => {

@@ -7,6 +7,11 @@ import colors from '../utils/colors'
 import axios from 'axios'
 import { format } from 'timeago.js'
 import { AuthContext } from '../components/context/AuthContext'
+import TimeAgo from 'react-timeago'
+import frenchStrings from 'react-timeago/lib/language-strings/fr'
+import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
+
+const formatter = buildFormatter(frenchStrings)
 
 const Poster = styled.div`
   width: 100%;
@@ -106,7 +111,8 @@ export default function Post({ post }) {
       return true
   }
 
-  const deletePost = async () => {
+  const deletePost = async e => {
+    e.preventDefault()
     try {
       const tokenAcces = currentUser.token
       await axios.delete(
@@ -131,11 +137,17 @@ export default function Post({ post }) {
               alt="Image du propriètaire de la publication"
             />
             <PostLogin>{user.login}</PostLogin>
-            <PostDate>{format(post.creationDate)}</PostDate>
+
+            <TimeAgo date={post.creationDate} formatter={formatter} />
           </PostHautGauche>
 
           <PostHautDroit>
-            {UpdatePost() ? <button onClick={deletePost}>Delete</button> : null}
+            {UpdatePost() ? (
+              <div>
+                <button onClick={deletePost}>Supprimer</button>
+                <button>Modiefier</button>
+              </div>
+            ) : null}
           </PostHautDroit>
         </PostHaut>
         <PostCentre>

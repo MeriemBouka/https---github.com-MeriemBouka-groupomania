@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import imageProfil from '../assets/0b40b35a17822a88bb6baa8f8b4ce32a.jpg'
 import colors from '../../src/utils/colors'
 import { AuthContext } from './context/AuthContext'
+import ProfilImg from '../assets/profil.png'
 
 const ProfileCard = styled.aside`
   flex: 4;
@@ -68,7 +68,10 @@ export default function Sidebar() {
   return (
     <ProfileCard>
       <div>
-        <ImgProfile src={imageProfil} alt="Image de profil" />
+        <ImgProfile
+          src={currentUser.userImg || `${ProfilImg}`}
+          alt="Image de profil"
+        />
       </div>
       <ProfileCardInfo>
         <Login>{currentUser.login}</Login>
