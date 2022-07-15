@@ -8,16 +8,12 @@ import { AuthContext } from './context/AuthContext'
 import axios from 'axios'
 
 const Partager = styled.div`
-  width: calc(80%);
-  height: 200px;
+  width: 100%;
+  height: 180px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: ${colors.blanc};
   margin-top: 30px;
-  @media (max-width: 800px) {
-    width: calc(90%);
-    margin-left: calc(5%);
-  }
 `
 const PartageWrap = styled.form`
   padding: 10px;
@@ -26,14 +22,9 @@ const PartageTop = styled.div`
   display: flex;
   align-items: end;
 `
-const ImgProfile = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 20px;
-`
 const PartageInput = styled.input`
+  padding-top: 30px;
+  padding-left: 20px;
   font-size: 14pt;
   border: none;
   width: 80%;
@@ -48,7 +39,7 @@ const PartageBottom = styled.div`
   justify-content: space-between;
 `
 const PartageHr = styled.hr`
-  margin: 10px;
+  margin: 20px;
 `
 const PartageOption = styled.label`
   display: flex;
@@ -75,38 +66,91 @@ const PartageBoutton = styled.button`
   }
 `
 
-export default function Partage() {
+export default function Modal({ publication }) {
   const { user } = useContext(AuthContext)
   const text = useRef()
   const [image, setImage] = useState(null)
 
   const submitHandler = async (e) => {
     e.preventDefault()
+    console.log(image)
     const post = {
       userId: user.userId,
       text: text.current.value,
     }
+
     const data = new FormData()
     data.append('image', image)
     data.append('post', JSON.stringify(post))
 
     const tokenAcces = user.token
-    await axios
-      .post('/publication/', data, {
-        headers: {
-          Authorization: 'Bearer ' + tokenAcces,
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        if (response.data.message) {
-          window.location.reload()
+    console.log(post.text)
+    if (image) {
+      console.log('voilà mon text1', text.current.value)
+      if (text.current.value == '') {
+        const post = {
+          userId: user.userId,
+          text: publication.text,
         }
-        console.log(response.data.message)
-      })
-      .catch((e) => {
-        console.log('Error: ', e.message)
-      })
+
+        const data = new FormData()
+        data.append('image', image)
+        data.append('post', JSON.stringify(post))
+        console.log('voilà ma daaaaaaaaataaaaaa', data)
+        await axios
+          .put('/publication/' + publication._id, data, {
+            headers: {
+              Authorization: 'Bearer ' + tokenAcces,
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            if (response.data.message) {
+              window.location.reload()
+            }
+            console.log(response.data.message)
+          })
+          .catch((e) => {
+            console.log('Error: ', e.message)
+          })
+      } else {
+        await axios
+          .put('/publication/' + publication._id, data, {
+            headers: {
+              Authorization: 'Bearer ' + tokenAcces,
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            if (response.data.message) {
+              window.location.reload()
+            }
+            console.log(response.data.message)
+          })
+          .catch((e) => {
+            console.log('Error: ', e.message)
+          })
+      }
+    } else {
+      await axios
+        .put('/publication/' + publication._id, post, {
+          headers: {
+            Authorization: 'Bearer ' + tokenAcces,
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          // if (response.data.message) {
+          //   window.location.reload()
+          // }
+          console.log(response.data.message)
+        })
+        .catch((e) => {
+          console.log('Error: ', e.message)
+        })
+    }
+    console.log(image)
+    console.log(post)
   }
 
   return (
@@ -114,15 +158,14 @@ export default function Partage() {
       <PartageWrap
         enctype="multipart/form-data"
         onSubmit={submitHandler}
-        method="Post"
+        method="Put"
       >
         <PartageTop data={user.userId}>
-          <ImgProfile src={user.imgUrl ? user.imgUrl : profileImg} alt="" />
           <PartageInput
-            placeholder={'Quoi de neuf ' + user.login + '?'}
             ref={text}
             id="content"
             name="content"
+            placeholder={publication.text}
           />
         </PartageTop>
 
@@ -137,10 +180,7 @@ export default function Partage() {
             <PartageOptionText>Photo</PartageOptionText>
             <input
               type="file"
-              id="image"
               name="image"
-              accept=".png, .jpeg, .jpg"
-              style={{ display: 'none' }}
               onChange={(e) => setImage(e.target.files[0])}
             />
           </PartageOption>

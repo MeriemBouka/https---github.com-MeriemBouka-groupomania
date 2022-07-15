@@ -8,7 +8,7 @@ exports.createPost = (req, res, next) => {
   delete postObject._userId
   const post = new Post({
     ...postObject,
-    // userId: req.auth.userId,
+    userId: req.auth.userId,
     imgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
   });
   post

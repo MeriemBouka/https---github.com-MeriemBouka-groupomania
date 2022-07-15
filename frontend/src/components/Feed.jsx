@@ -3,6 +3,9 @@ import Partage from './Partage'
 import Post from './Post'
 import axios from 'axios'
 import { AuthContext } from './context/AuthContext'
+import styled from 'styled-components'
+
+const Article = styled.article``
 
 export default function Feed() {
   const [posts, setPosts] = useState([])
@@ -28,11 +31,12 @@ export default function Feed() {
     fetchPosts()
   }, [])
   return (
-    <article>
+    <Article>
       <Partage />
+
       {posts.map(p => (
         <Post key={p._id} post={p} />
       ))}
-    </article>
+    </Article>
   )
 }

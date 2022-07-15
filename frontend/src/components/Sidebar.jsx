@@ -6,13 +6,13 @@ import ProfilImg from '../assets/profil.png'
 
 const ProfileCard = styled.aside`
   flex: 4;
-  width: 20rem;
+  width: 300px;
   height: 270px;
-  border-radius: 1.5rem;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 1rem;
+  gap: 16px;
   background-color: ${colors.blanc};
   margin: 100px 0 0 10px;
   box-shadow: 2px 3px 10px gray;
@@ -21,11 +21,14 @@ const ProfileCard = styled.aside`
     cursor: pointer;
     box-shadow: 2px 2px 10px #e2e3e9;
   }
+  @media (max-width: 800px) {
+    display: none;
+  }
 `
 
 const ImgProfile = styled.img`
   position: absolute;
-  bottom: 13rem;
+  bottom: 192px;
   height: 150px;
   width: 150px;
   margin: 10px;
@@ -37,7 +40,7 @@ const ProfileCardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 3rem;
+  margin-top: 4rem;
 `
 const Login = styled.span`
   padding-top: 20px;
@@ -45,7 +48,7 @@ const Login = styled.span`
 `
 const ProfileCardElements = styled.div`
   padding-top: 60px;
-  gap: 2rem;
+  gap: 32rem;
   text-align: center;
 `
 

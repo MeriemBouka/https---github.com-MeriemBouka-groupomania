@@ -1,60 +1,50 @@
-import React from 'react' 
+import React from 'react'
 import styled from 'styled-components'
-import colors from '../utils/colors' 
+import colors from '../utils/colors'
 import logo from '../assets/icon-left-font-monochrome-white.svg'
-import { faArrowRightFromBracket, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {Link} from "react-router-dom"
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Header = styled.header`
-max-width:100%;
-display : flex;
-justify-content: space-between;
-background-color: ${colors.primaire};
-padding:0.5rem 0.5rem;
+  max-width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 40px;
+  background-color: ${colors.primaire};
 `
 const Logo = styled.img`
-height : 30px;
-`;
+  height: 40px;
+  padding-left: 5px;
+`
 
 const Menu = styled.nav`
-width:30%;
-display: flex;
-justify-content: space-around;
-color: white;
+  color: white;
 `
 
-const Blur = styled.div`
-  position: absolute;
-  width: 22rem;
-  height:14rem;
-  border-radius: 50%;
-  background-color: ${colors.secondaire};  
-  filter : blur(72px);
-`
-
-export default function Topbar(){
-  const deconnexion = () =>{
-  localStorage.clear();
-   window.location.reload();
+export default function Topbar({ user }) {
+  if (localStorage.getItem('userId') == null) {
+    const notConnect = false
   }
-return(
-    <nav className="topbarContainer">
-        <div className="topbarLeft">
-           <Header>
-            <Link to="/">
-              <Logo src={logo} alt="logo Groupomania"/>
-            </Link>
-              <Menu>               
-                <FontAwesomeIcon icon={faArrowRightFromBracket} size="lg" style={{cursor:'pointer'}} onClick={deconnexion}/>
-              </Menu>
-          </Header> 
-             <Blur style ={{top : '36%', right:'-8'}}></Blur>
-        </div>
-        <div className="topbarRight">
-         
-        </div>
-      
-    </nav>
-)
+
+  const deconnexion = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
+  return (
+    <>
+      <Header>
+        <Logo src={logo} alt="logo Groupomania" />
+        <Menu>
+          <FontAwesomeIcon
+            icon={faArrowRightFromBracket}
+            size="xl"
+            style={{ cursor: 'pointer' }}
+            onClick={deconnexion}
+          />
+        </Menu>
+      </Header>
+    </>
+  )
 }
