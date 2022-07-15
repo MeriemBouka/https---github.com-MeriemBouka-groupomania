@@ -16,6 +16,6 @@ module.exports = (req, res, next) =>{
         next();
     }
     else{
-        res.status(400).json({"message" : `Mot de passe non sécurisé !`})
+        res.status(401).json({"message" : `Mot de passe non sécurisé !`})
     }
 }

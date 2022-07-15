@@ -37,12 +37,16 @@ export default function Topbar({ user }) {
       <Header>
         <Logo src={logo} alt="logo Groupomania" />
         <Menu>
-          <FontAwesomeIcon
-            icon={faArrowRightFromBracket}
-            size="xl"
-            style={{ cursor: 'pointer' }}
-            onClick={deconnexion}
-          />
+          {user ? (
+            <FontAwesomeIcon
+              icon={faArrowRightFromBracket}
+              size="xl"
+              style={{ cursor: 'pointer' }}
+              onClick={deconnexion}
+            />
+          ) : (
+            <></>
+          )}
         </Menu>
       </Header>
     </>

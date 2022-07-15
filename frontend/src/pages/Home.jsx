@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Topbar from '../components/Topbar'
 import Sidebar from '../components/Sidebar'
 import Feed from '../components/Feed'
@@ -15,9 +15,10 @@ const Homee = styled.div`
 `
 
 export default function Home() {
+  const { user } = useContext(AuthContext)
   return (
     <div>
-      <Topbar />
+      <Topbar user={user} />
       <Homee>
         <Sidebar></Sidebar>
         <Feed></Feed>

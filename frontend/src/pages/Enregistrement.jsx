@@ -92,11 +92,14 @@ const LoginEnregistrementBtn = styled(LoginButton)`
 export default function Enregistrement() {
   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   const regexLogin = /^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]{0,20}$/
+  const regexMdp = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).*$/
   const [error, setError] = useState('')
+  const [errorLogin, setErrorLogin] = useState('')
   const [userName, setUserName] = useState('')
   const [mail, setMail] = useState('')
-  const [msg, setMsg] = useState('')
   const [mdp, setMdp] = useState('')
+  const [msg, setMsg] = useState('')
+  const [msgMdp, setMsgMdp] = useState('')
   const login = useRef()
   const email = useRef()
   const password = useRef()
@@ -115,9 +118,18 @@ export default function Enregistrement() {
   const validLogin = e => {
     setUserName(e.target.value)
     if (regexLogin.test(userName) === false) {
-      setError('Login non valid ')
+      setErrorLogin('Login non valide')
     } else {
-      setError('')
+      setErrorLogin('')
+      return true
+    }
+  }
+  const validMdp = e => {
+    setMdp(e.target.value)
+    if (regexMdp.test(mdp) === false) {
+      setMdp('Mot de passe  non valide')
+    } else {
+      setMdp('')
       return true
     }
   }
@@ -134,21 +146,32 @@ export default function Enregistrement() {
       navigate('/login')
     } catch (error) {
       console.log(error.message)
-      if (error.message === 'Request failed with status code 400') {
-        setMsg('Adresse déjà existante !')
+      if (error.response.status === 400) {
+        setMsg('adresse mail déjà utilisée! ')
       }
-      console.log(error.response.data.message)
-      if (error.response.data.message === 'Mot de passe non sécurisé !') {
-        setMdp('Mot de passe non sécurisé ! ')
+      console.log(error.response.status)
+      if (error.response.status === 401) {
+        setMsgMdp('Mot de passe non sécurisé !')
       }
     }
   }
 
+  let erreurLog
+  if (errorLogin) {
+    erreurLog = <ErrorMsg>{errorLogin}</ErrorMsg>
+  }
   let erreur
   if (error) {
     erreur = <ErrorMsg>{error}</ErrorMsg>
   } else if (msg) {
     erreur = <ErrorMsg>{msg}</ErrorMsg>
+  }
+  let erreurMdp
+
+  if (msgMdp) {
+    erreurMdp = <ErrorMsg>{msgMdp}</ErrorMsg>
+  } else if (mdp && msgMdp) {
+    erreurMdp = <ErrorMsg>{mdp}</ErrorMsg>
   }
 
   return (
@@ -171,6 +194,7 @@ export default function Enregistrement() {
                 maxlength="20"
                 onChange={validLogin}
               />
+              <ErrorMsg>{erreurLog}</ErrorMsg>
               <EmailMdp
                 type="email"
                 placeholder="Email"
@@ -184,9 +208,10 @@ export default function Enregistrement() {
                 placeholder="Mot de passe"
                 minLength="8"
                 ref={password}
+                onChange={validMdp}
                 required
               />
-              <ErrorMdp>{mdp}</ErrorMdp>
+              <ErrorMdp>{erreurMdp}</ErrorMdp>
               <LoginButton type="submit">S'inscrire</LoginButton>
               <LoginEnregistrementBtn>
                 <Link
