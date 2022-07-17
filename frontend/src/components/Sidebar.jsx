@@ -11,10 +11,11 @@ const ProfileCard = styled.aside`
   border-radius: 24px;
   display: flex;
   flex-direction: column;
-  position: relative;
-  gap: 16px;
+  position: sticky;
+  top: 80px;
+  gap: 30px;
   background-color: ${colors.blanc};
-  margin: 100px 0 0 10px;
+  margin: 100px 0 0 30px;
   box-shadow: 2px 3px 10px gray;
   transition: 400ms;
   &:hover {

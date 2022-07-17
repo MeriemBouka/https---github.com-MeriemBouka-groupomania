@@ -3,6 +3,12 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.signup = (req, res, next) => {
+  User.findOne({ login: req.body.login })
+    .then((user) => {
+      if (user) {
+        return res.status(401).json({ error: "Nom d'utilisateur existant" });
+      }
+      else{
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -18,13 +24,14 @@ exports.signup = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
-};
-
+  }
+})
+}
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ error: "Utilisateur non trouvé !" });
+        return res.status(400).json({ error: "Utilisateur non trouvé !" });
       }
       bcrypt
         .compare(req.body.password, user.password)

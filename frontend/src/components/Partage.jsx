@@ -8,7 +8,7 @@ import { AuthContext } from './context/AuthContext'
 import axios from 'axios'
 
 const Partager = styled.div`
-  width: calc(80%);
+  width: 80%;
   height: 200px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -38,6 +38,9 @@ const PartageInput = styled.input`
   border: none;
   width: 80%;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   &:focus {
     outline: none;
   }
@@ -74,11 +77,15 @@ const PartageBoutton = styled.button`
     color: ${colors.primaire};
   }
 `
-
+const MsgImage = styled.div`
+  margin-top: 5px;
+  color: ${colors.primaire};
+`
 export default function Partage() {
   const { user } = useContext(AuthContext)
   const text = useRef()
   const [image, setImage] = useState(null)
+  const [msgImage, setMsgImage] = useState('')
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -86,6 +93,13 @@ export default function Partage() {
       userId: user.userId,
       text: text.current.value,
     }
+
+    if (image) {
+      setMsgImage(<></>)
+    } else {
+      setMsgImage(<MsgImage>Ajouter une image à votre poste ! </MsgImage>)
+    }
+
     const data = new FormData()
     data.append('image', image)
     data.append('post', JSON.stringify(post))
@@ -146,6 +160,7 @@ export default function Partage() {
           </PartageOption>
           <PartageBoutton type="submit">Publier</PartageBoutton>
         </PartageBottom>
+        {msgImage}
       </PartageWrap>
     </Partager>
   )

@@ -8,15 +8,17 @@ import Topbar from '../components/Topbar'
 
 const LogIn = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80vh;
   background-color: ${colors.blanc};
   display: flex;
   align-items: center;
   justify-content: center;
+  @media (max-width: 800px) {
+    max-height: 80vh;
+  }
 `
 const LoginWrapp = styled.div`
   width: 70%;
-  height: 70%;
   display: flex;
 `
 const LoginGauche = styled.div`
@@ -33,10 +35,7 @@ const LoginGauche = styled.div`
     }
   }
 `
-const LoginLogo = styled.img`
-max-height: 100%
-max-width : 100%;
-`
+const LoginLogo = styled.img``
 const LoginDroit = styled.div`
   flex: 1;
   display: flex;
@@ -61,6 +60,9 @@ const EmailMdp = styled.input`
   &:focus {
     outline: none;
   }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 const ErrorMsg = styled.div`
   color: red;
@@ -90,68 +92,75 @@ const LoginEnregistrementBtn = styled(LoginButton)`
 `
 
 export default function Enregistrement() {
-  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
   const regexLogin = /^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]{0,20}$/
   const regexMdp = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).*$/
-  const [error, setError] = useState('')
+  const [errorMail, setErrorMail] = useState('')
   const [errorLogin, setErrorLogin] = useState('')
   const [userName, setUserName] = useState('')
   const [mail, setMail] = useState('')
   const [mdp, setMdp] = useState('')
-  const [msg, setMsg] = useState('')
-  const [msgMdp, setMsgMdp] = useState('')
+  const [mdpServError, setMdpServError] = useState('')
+  const [mailServError, setMailServError] = useState('')
+  const [loginServError, setLoginServError] = useState('')
+  const [errorMdp, setErrorMdp] = useState('')
   const login = useRef()
   const email = useRef()
   const password = useRef()
   const navigate = useNavigate()
 
-  const validEmail = e => {
+  const validEmail = (e) => {
     setMail(e.target.value)
-    if (regex.test(mail) === false) {
-      setError('Adresse mail non valide ! ')
+    if (regex.test(mail) === false || mail === '') {
+      setErrorMail('Adresse mail non valide ! ')
     } else {
-      setError('')
+      setErrorMail('')
       return true
     }
   }
 
-  const validLogin = e => {
+  const validLogin = (e) => {
+    e.preventDefault()
     setUserName(e.target.value)
-    if (regexLogin.test(userName) === false) {
+    if (regexLogin.test(userName) === false || userName === '') {
       setErrorLogin('Login non valide')
     } else {
       setErrorLogin('')
       return true
     }
   }
-  const validMdp = e => {
+  const validMdp = (e) => {
+    e.preventDefault()
     setMdp(e.target.value)
-    if (regexMdp.test(mdp) === false) {
-      setMdp('Mot de passe  non valide')
+    if (regexMdp.test(mdp) === false || mdp === '') {
+      setErrorMdp('min 8 caractères, 1 majuscule, 1 chiffre.')
     } else {
-      setMdp('')
       return true
     }
   }
 
-  const handleClick = async e => {
+  const handleClick = async (e) => {
     e.preventDefault()
     const user = {
       login: login.current.value,
       email: email.current.value,
-      password: password.current.value
+      password: password.current.value,
     }
     try {
       await axios.post('/auth/signup', user)
       navigate('/login')
     } catch (error) {
+      console.log(error.response.data.error)
+      if (error.response.data.error === "Nom d'utilisateur existant") {
+        setLoginServError("Nom d'utilisateur déjà existant!")
+      }
       console.log(error.message)
       if (error.response.status === 400) {
-        setMsg('adresse mail déjà utilisée! ')
+        setMailServError('adresse mail déjà utilisée! ')
       }
       console.log(error.response.status)
       if (error.response.status === 401) {
-        setMsgMdp('Mot de passe non sécurisé !')
+        setMdpServError('Mot de passe non sécurisé !')
       }
     }
   }
@@ -159,21 +168,21 @@ export default function Enregistrement() {
   let erreurLog
   if (errorLogin) {
     erreurLog = <ErrorMsg>{errorLogin}</ErrorMsg>
+  } else {
+    erreurLog = <ErrorMsg>{loginServError}</ErrorMsg>
   }
   let erreur
-  if (error) {
-    erreur = <ErrorMsg>{error}</ErrorMsg>
-  } else if (msg) {
-    erreur = <ErrorMsg>{msg}</ErrorMsg>
+  if (errorMail) {
+    erreur = <ErrorMsg>{errorMail}</ErrorMsg>
+  } else if (mailServError) {
+    erreur = <ErrorMsg>{mailServError}</ErrorMsg>
   }
   let erreurMdp
-
-  if (msgMdp) {
-    erreurMdp = <ErrorMsg>{msgMdp}</ErrorMsg>
-  } else if (mdp && msgMdp) {
-    erreurMdp = <ErrorMsg>{mdp}</ErrorMsg>
+  if (mdpServError) {
+    erreurMdp = <ErrorMsg>{mdpServError}</ErrorMsg>
+  } else {
+    erreurMdp = <ErrorMsg>{errorMdp}</ErrorMsg>
   }
-
   return (
     <>
       <>
@@ -194,7 +203,7 @@ export default function Enregistrement() {
                 maxlength="20"
                 onChange={validLogin}
               />
-              <ErrorMsg>{erreurLog}</ErrorMsg>
+              {erreurLog}
               <EmailMdp
                 type="email"
                 placeholder="Email"
@@ -202,16 +211,16 @@ export default function Enregistrement() {
                 onChange={validEmail}
                 required
               />
-              <ErrorMsg>{erreur}</ErrorMsg>
+              {erreur}
               <EmailMdp
                 type="password"
-                placeholder="Mot de passe"
+                placeholder="min 8 caractères, 1 majuscule, 1 chiffre."
                 minLength="8"
                 ref={password}
                 onChange={validMdp}
                 required
               />
-              <ErrorMdp>{erreurMdp}</ErrorMdp>
+              {erreurMdp}
               <LoginButton type="submit">S'inscrire</LoginButton>
               <LoginEnregistrementBtn>
                 <Link

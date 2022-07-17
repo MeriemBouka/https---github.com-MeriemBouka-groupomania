@@ -65,6 +65,9 @@ const PartageBoutton = styled.button`
     color: ${colors.primaire};
   }
 `
+const File = styled.input`
+  display: none;
+`
 
 export default function Modal({ publication }) {
   const { user } = useContext(AuthContext)
@@ -87,7 +90,7 @@ export default function Modal({ publication }) {
     console.log(post.text)
     if (image) {
       console.log('voilà mon text1', text.current.value)
-      if (text.current.value == '') {
+      if (text.current.value === '') {
         const post = {
           userId: user.userId,
           text: publication.text,
@@ -140,9 +143,9 @@ export default function Modal({ publication }) {
           },
         })
         .then((response) => {
-          // if (response.data.message) {
-          //   window.location.reload()
-          // }
+          if (response.data.message) {
+            window.location.reload()
+          }
           console.log(response.data.message)
         })
         .catch((e) => {
@@ -171,14 +174,15 @@ export default function Modal({ publication }) {
 
         <PartageHr />
         <PartageBottom>
-          <PartageOption htmlFor="image">
+          <PartageOption htmlFor="file">
             <FontAwesomeIcon
               icon={faImages}
               size="2x"
               style={{ color: `${colors.primaire}` }}
             />
             <PartageOptionText>Photo</PartageOptionText>
-            <input
+            <File
+              id="file"
               type="file"
               name="image"
               onChange={(e) => setImage(e.target.files[0])}

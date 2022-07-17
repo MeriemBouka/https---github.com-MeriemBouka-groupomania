@@ -18,7 +18,8 @@ const Poster = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin: 30px 0;
-  @media (max-width: 800px) {width: calc(90%);
+  @media (max-width: 800px) {
+    width: 90%;
     margin-left: 5%;
 `
 const PostWrapp = styled.div`
@@ -69,7 +70,7 @@ const PostImg = styled.img`
 `
 const PostBas = styled.div`
   display: flex;
-  ilign-items: center;
+  align-items: center;
   justify-content: space-between;
   padding: 5px 0;
 `
@@ -135,8 +136,8 @@ export default function Post({ post }) {
         {
           headers: {
             Authorization: 'Bearer ' + tokenAcces,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       )
     } catch (err) {}
@@ -145,11 +146,11 @@ export default function Post({ post }) {
     setIsLiked(!isLiked)
   }
   const UpdatePost = () => {
-    if (post.userId == currentUser.userId || currentUser.isAdmin == true)
+    if (post.userId === currentUser.userId || currentUser.isAdmin === true)
       return true
   }
 
-  const deletePost = async e => {
+  const deletePost = async (e) => {
     e.preventDefault()
     try {
       const tokenAcces = currentUser.token
@@ -157,14 +158,14 @@ export default function Post({ post }) {
         '/publication/' + post._id + '?userId=' + currentUser.userId,
         {
           headers: {
-            Authorization: 'Bearer ' + tokenAcces
-          }
+            Authorization: 'Bearer ' + tokenAcces,
+          },
         }
       )
       window.location.reload()
     } catch (err) {}
   }
-  const modifyPost = async e => {
+  const modifyPost = async (e) => {
     e.preventDefault()
     setIsShow(!isShow)
   }
@@ -199,7 +200,7 @@ export default function Post({ post }) {
               style={{
                 color: `${colors.tertiaire}`,
                 cursor: 'pointer',
-                marginRight: '15px'
+                marginRight: '15px',
               }}
               onClick={likeHandler}
             />
