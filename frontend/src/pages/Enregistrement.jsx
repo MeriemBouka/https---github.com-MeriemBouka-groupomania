@@ -92,52 +92,13 @@ const LoginEnregistrementBtn = styled(LoginButton)`
 `
 
 export default function Enregistrement() {
-  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
-  const regexLogin = /^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]{0,20}$/
-  const regexMdp = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).*$/
-  const [errorMail, setErrorMail] = useState('')
-  const [errorLogin, setErrorLogin] = useState('')
-  const [userName, setUserName] = useState('')
-  const [mail, setMail] = useState('')
-  const [mdp, setMdp] = useState('')
   const [mdpServError, setMdpServError] = useState('')
   const [mailServError, setMailServError] = useState('')
   const [loginServError, setLoginServError] = useState('')
-  const [errorMdp, setErrorMdp] = useState('')
   const login = useRef()
   const email = useRef()
   const password = useRef()
   const navigate = useNavigate()
-
-  const validEmail = (e) => {
-    setMail(e.target.value)
-    if (regex.test(mail) === false || mail === '') {
-      setErrorMail('Adresse mail non valide ! ')
-    } else {
-      setErrorMail('')
-      return true
-    }
-  }
-
-  const validLogin = (e) => {
-    e.preventDefault()
-    setUserName(e.target.value)
-    if (regexLogin.test(userName) === false || userName === '') {
-      setErrorLogin('Login non valide')
-    } else {
-      setErrorLogin('')
-      return true
-    }
-  }
-  const validMdp = (e) => {
-    e.preventDefault()
-    setMdp(e.target.value)
-    if (regexMdp.test(mdp) === false || mdp === '') {
-      setErrorMdp('min 8 caractères, 1 majuscule, 1 chiffre.')
-    } else {
-      return true
-    }
-  }
 
   const handleClick = async (e) => {
     e.preventDefault()
@@ -166,22 +127,17 @@ export default function Enregistrement() {
   }
 
   let erreurLog
-  if (errorLogin) {
-    erreurLog = <ErrorMsg>{errorLogin}</ErrorMsg>
-  } else {
+  if (loginServError) {
     erreurLog = <ErrorMsg>{loginServError}</ErrorMsg>
   }
   let erreur
-  if (errorMail) {
-    erreur = <ErrorMsg>{errorMail}</ErrorMsg>
-  } else if (mailServError) {
+
+  if (mailServError) {
     erreur = <ErrorMsg>{mailServError}</ErrorMsg>
   }
   let erreurMdp
   if (mdpServError) {
     erreurMdp = <ErrorMsg>{mdpServError}</ErrorMsg>
-  } else {
-    erreurMdp = <ErrorMsg>{errorMdp}</ErrorMsg>
   }
   return (
     <>
@@ -198,26 +154,30 @@ export default function Enregistrement() {
             <LoginBox onSubmit={handleClick}>
               <EmailMdp
                 placeholder="Nom d'utilisateur"
+                type="text"
                 ref={login}
                 required
                 maxlength="20"
-                onChange={validLogin}
+                pattern="^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]{0,20}$"
+                title=" Le nom d'utilisateur n'est pas valide"
               />
               {erreurLog}
               <EmailMdp
                 type="email"
                 placeholder="Email"
                 ref={email}
-                onChange={validEmail}
+                pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"
+                title=" L'adresse Email n'est pas valide"
                 required
               />
               {erreur}
               <EmailMdp
                 type="password"
-                placeholder="min 8 caractères, 1 majuscule, 1 chiffre."
+                placeholder="Mot de passe"
                 minLength="8"
                 ref={password}
-                onChange={validMdp}
+                pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,})$"
+                title=" Le mot de passe doit contenir au moins : 8 caractères, 1 majuscule, 1 chiffre."
                 required
               />
               {erreurMdp}

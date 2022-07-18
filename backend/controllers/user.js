@@ -2,9 +2,27 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+function isEmail(email){
+    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+    if(email !== '' && regex.test(email)){
+        return true;
+    }
+}
+function isLogin(login){
+      const regexLogin = /^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]{0,20}$/
+
+    if(login !== '' && regexLogin.test(login)){
+        return true;
+    }
+}
+
 exports.signup = (req, res, next) => {
+  if(!isEmail(req.body.email) || !isLogin(req.body.login)){
+  return res.status(400).json({ error: "code ne respecte pas le modèle !" });
+}
+else{
   User.findOne({ login: req.body.login })
-    .then((user) => {
+  .then((user) => {
       if (user) {
         return res.status(401).json({ error: "Nom d'utilisateur existant" });
       }
@@ -27,9 +45,15 @@ exports.signup = (req, res, next) => {
   }
 })
 }
+}
 exports.login = (req, res, next) => {
+ 
   User.findOne({ email: req.body.email })
-    .then((user) => {
+  .then((user) => {
+      if(!isEmail(req.body.email)){
+      return res.status(400).json({ error: "code ne respecte pas le modèle !" });
+     }
+     else{
       if (!user) {
         return res.status(400).json({ error: "Utilisateur non trouvé !" });
       }
@@ -49,6 +73,7 @@ exports.login = (req, res, next) => {
           });
         })
         .catch((error) => res.status(500).json({ error }));
+       } 
     })
     .catch((error) => res.status(500).json({ error }));
 };

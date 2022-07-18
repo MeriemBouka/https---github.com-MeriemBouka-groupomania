@@ -92,38 +92,12 @@ const ErrorMsg = styled.div`
 `
 
 export default function Login() {
-  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
-  const regexMdp = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).*$/
-  const [errorMail, setErrorMail] = useState('')
-  const [errorMdp, setErrorMdp] = useState('')
-  const [mail, setMail] = useState('')
-  const [mdp, setMdp] = useState('')
   const email = useRef()
   const password = useRef()
   const [mailServError, setMailServError] = useState('')
   const [mdpServError, setMdpServError] = useState('')
   const [accesInterdit, setAccesInterdit] = useState('')
   const { error, dispatch } = useContext(AuthContext)
-
-  const validEmail = (e) => {
-    setMail(e.target.value)
-    if (regex.test(mail) === false || mail === '') {
-      setErrorMail('Adresse mail non valide ! ')
-    } else {
-      setErrorMail('')
-      return true
-    }
-  }
-
-  const validMdp = (e) => {
-    e.preventDefault()
-    setMdp(e.target.value)
-    if (regexMdp.test(mdp) === false || mdp === '') {
-      setErrorMdp('min 8 caractères, 1 majuscule, 1 chiffre.')
-    } else {
-      return true
-    }
-  }
 
   const handleClick = async (e) => {
     e.preventDefault()
@@ -146,20 +120,16 @@ export default function Login() {
     }
   }
 
-  let errorMailFrontBack
+  let errorMail
 
   if (mailServError) {
-    errorMailFrontBack = <ErrorMsg>{mailServError}</ErrorMsg>
-  } else {
-    errorMailFrontBack = <ErrorMsg>{errorMail}</ErrorMsg>
+    errorMail = <ErrorMsg>{mailServError}</ErrorMsg>
   }
 
-  let errorMdpFrontBack
+  let errorMdp
 
   if (mdpServError) {
-    errorMdpFrontBack = <ErrorMsg>{mdpServError}</ErrorMsg>
-  } else {
-    errorMdpFrontBack = <ErrorMsg>{errorMdp}</ErrorMsg>
+    errorMdp = <ErrorMsg>{mdpServError}</ErrorMsg>
   }
 
   return (
@@ -178,19 +148,21 @@ export default function Login() {
                 type="email"
                 placeholder="Email"
                 ref={email}
+                pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"
+                title=" L'adresse Email n'est pas valide"
                 required
-                onChange={validEmail}
               />
-              {errorMailFrontBack}
+              {errorMail}
 
               <EmailMdp
                 type="password"
                 placeholder="Mot de passe"
                 ref={password}
+                pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,})$"
+                title=" Le mot de passe doit contenir au moins : 8 caractères, 1 majuscule, 1 chiffre."
                 required
-                onChange={validMdp}
               />
-              {errorMdpFrontBack}
+              {errorMdp}
 
               <LoginButton type="submit">
                 {accesInterdit ? accesInterdit : 'Se connecter'}
