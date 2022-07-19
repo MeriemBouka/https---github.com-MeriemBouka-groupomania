@@ -42,4 +42,4 @@ Il faut noter que l'application se charge automatiquement suite à la modificati
 L'API Groupomania utilise le port 3000 par défaut. Le chemin d'accès au backend est le suivant :
 http://localhost:3000/api 
 
-NB: Afin de s'assurer du bon fonctionnement du projet, il est necéssaire de dupliquer le fichier ".env.example" en un fichier ".env" et de remplir les vides par les informations de connexion de votre propre base de données. 
+NB: Afin de s'assurer du bon fonctionnement du projet, il est necéssaire de dupliquer le fichier ".env.example " en un fichier ".env" et de remplir les vides par les informations de connexion de votre propre base de données. 
