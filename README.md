@@ -12,7 +12,7 @@ informel..
 
 ## Groupomania - Frontend
 ***
-<br/>
+
 -  Le projet a été généré avec React  version 18.2.0 .
 
 - Ouvrir le terminal à la racine du projet et executer les commandes suivantes :
@@ -32,7 +32,7 @@ Il faut noter que l'application se charge automatiquement suite à la modificati
 
 ## Groupomania - Backend
 ***
-<br/>
+
 
 - Acceder au dossier backend et executer les commandes :  
 
