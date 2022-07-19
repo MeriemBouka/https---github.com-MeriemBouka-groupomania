@@ -8,10 +8,7 @@ un réseau social interne,
 moderne et ludique, qui permettra aux employés de se connaître dans un cadre plus
 informel..
 
-<br/>
-
 ## Groupomania - Frontend
-***
 <br/>
 -  Le projet a été généré avec React  version 18.2.0 .
 
@@ -28,10 +25,7 @@ Le chemin d'accès au frontend : http://localhost:4200/
 
 Il faut noter que l'application se charge automatiquement suite à la modification de l'un des fichiers source.
 
-<br/>
-
 ## Groupomania - Backend
-***
 <br/>
 
 - Acceder au dossier backend et executer les commandes :  
