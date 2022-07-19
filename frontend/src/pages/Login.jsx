@@ -79,6 +79,12 @@ const LoginButton = styled.button`
   &:hover {
     opacity: 0.7;
   }
+  &:disabled {
+    background-color: black;
+    &:hover {
+      opacity: 1;
+    }
+  }
 `
 const LoginEnregistrementBtn = styled(LoginButton)`
   background-color: ${colors.tertiaire};
@@ -144,14 +150,7 @@ export default function Login() {
           </LoginGauche>
           <LoginDroit>
             <LoginBox onSubmit={handleClick}>
-              <EmailMdp
-                type="email"
-                placeholder="Email"
-                ref={email}
-                pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"
-                title=" L'adresse Email n'est pas valide"
-                required
-              />
+              <EmailMdp type="email" placeholder="Email" ref={email} required />
               {errorMail}
 
               <EmailMdp
@@ -164,7 +163,7 @@ export default function Login() {
               />
               {errorMdp}
 
-              <LoginButton type="submit">
+              <LoginButton type="submit" disabled={accesInterdit}>
                 {accesInterdit ? accesInterdit : 'Se connecter'}
               </LoginButton>
               <LoginEnregistrementBtn>

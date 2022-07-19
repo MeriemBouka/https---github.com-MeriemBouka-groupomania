@@ -51,7 +51,7 @@ exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
   .then((user) => {
       if(!isEmail(req.body.email)){
-      return res.status(400).json({ error: "code ne respecte pas le modèle !" });
+      return res.status(400).json({ error: "code ne respecte pas le modèle ." });
      }
      else{
       if (!user) {
