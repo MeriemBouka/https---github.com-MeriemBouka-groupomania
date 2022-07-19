@@ -11,7 +11,6 @@ informel..
 <br/>
 
 ## Groupomania - Frontend
-***
 
 -  Le projet a été généré avec React  version 18.2.0 .
 
@@ -31,7 +30,6 @@ Il faut noter que l'application se charge automatiquement suite à la modificati
 <br/>
 
 ## Groupomania - Backend
-***
 
 
 - Acceder au dossier backend et executer les commandes :  
