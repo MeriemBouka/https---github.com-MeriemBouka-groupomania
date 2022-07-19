@@ -9,7 +9,11 @@ moderne et ludique, qui permettra aux employés de se connaître dans un cadre p
 informel..
 
 ## Groupomania - Frontend
+<<<<<<< HEAD
 <br/>
+=======
+
+>>>>>>> 4577772a870d30c76124bc3b633ef47188af4dc3
 -  Le projet a été généré avec React  version 18.2.0 .
 
 - Ouvrir le terminal à la racine du projet et executer les commandes suivantes :
@@ -26,7 +30,11 @@ Le chemin d'accès au frontend : http://localhost:4200/
 Il faut noter que l'application se charge automatiquement suite à la modification de l'un des fichiers source.
 
 ## Groupomania - Backend
+<<<<<<< HEAD
 <br/>
+=======
+
+>>>>>>> 4577772a870d30c76124bc3b633ef47188af4dc3
 
 - Acceder au dossier backend et executer les commandes :  
 
@@ -36,4 +44,4 @@ Il faut noter que l'application se charge automatiquement suite à la modificati
 L'API Groupomania utilise le port 3000 par défaut. Le chemin d'accès au backend est le suivant :
 http://localhost:3000/api 
 
-NB: Afin de s'assurer du bon fonctionnement du projet, il est necéssaire de dupliquer le fichier ".env.example" en un fichier ".env" et de remplir les vides par les informations de connexion de votre propre base de données. 
+NB: Afin de s'assurer du bon fonctionnement du projet, il est necéssaire de dupliquer le fichier ".env.example " en un fichier ".env" et de remplir les vides par les informations de connexion de votre propre base de données. 
