@@ -2,7 +2,7 @@ import React, { useRef, useContext, useState } from 'react'
 import styled from 'styled-components'
 import Logo from '../assets/icon-left-font.svg'
 import colors from '../utils/colors'
-import { loginCall } from '../../src/apiCalls'
+import axios from 'axios'
 import { AuthContext } from '../components/context/AuthContext'
 import { Link } from 'react-router-dom'
 import Topbar from '../components/Topbar'
@@ -103,28 +103,36 @@ export default function Login() {
   const [mailServError, setMailServError] = useState('')
   const [mdpServError, setMdpServError] = useState('')
   const [accesInterdit, setAccesInterdit] = useState('')
-  const { error, dispatch } = useContext(AuthContext)
+  const { dispatch } = useContext(AuthContext)
 
   const handleClick = async (e) => {
     e.preventDefault()
-
-    loginCall(
-      { email: email.current.value, password: password.current.value },
-      dispatch
-    )
-
-    console.log(error.message === 'Request failed with status code 429')
-
-    if (error.message === 'Request failed with status code 400') {
-      setMailServError('Utilisateur non trouvé !!')
+    const userIdentifiants = {
+      email: email.current.value,
+      password: password.current.value,
     }
-    if (error.message === 'Request failed with status code 401') {
-      setMdpServError(' Mot de passe incorrect !')
-    }
-    if (error.message === 'Request failed with status code 429') {
-      setAccesInterdit('Compte bloqué pour 1 minute')
+    try {
+      const res = await axios.post(
+        'http://localhost:3000/api/auth/login',
+        userIdentifiants
+      )
+      dispatch({ type: 'LOGIN_SUCCES', payload: res.data })
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAILURE', payload: error })
+
+      console.log(error.response.status === 401)
+      if (error.response.status === 401) {
+        setMdpServError(' Mot de passe incorrect !')
+      }
+      if (error.response.status === 400) {
+        setMailServError('Utilisateur non trouvé !!')
+      }
+      if (error.response.status === 429) {
+        setAccesInterdit('Compte bloqué pour 1 minute')
+      }
     }
   }
+  console.log(mdpServError)
 
   let errorMail
 
@@ -150,7 +158,14 @@ export default function Login() {
           </LoginGauche>
           <LoginDroit>
             <LoginBox onSubmit={handleClick}>
-              <EmailMdp type="email" placeholder="Email" ref={email} required />
+              <EmailMdp
+                type="email"
+                placeholder="Email"
+                ref={email}
+                pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"
+                title=" L'adresse Email n'est pas valide"
+                required
+              />
               {errorMail}
 
               <EmailMdp

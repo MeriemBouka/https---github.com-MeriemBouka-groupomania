@@ -100,10 +100,14 @@ export default function Enregistrement() {
   const password = useRef()
   const navigate = useNavigate()
 
+  const premiereLettreMaj = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
   const handleClick = async (e) => {
     e.preventDefault()
     const user = {
-      login: login.current.value,
+      login: premiereLettreMaj(login.current.value),
       email: email.current.value,
       password: password.current.value,
     }
@@ -111,15 +115,14 @@ export default function Enregistrement() {
       await axios.post('/auth/signup', user)
       navigate('/login')
     } catch (error) {
-      console.log(error.response.data.error)
       if (error.response.data.error === "Nom d'utilisateur existant") {
         setLoginServError("Nom d'utilisateur déjà existant!")
       }
-      console.log(error.message)
+
       if (error.response.status === 400) {
         setMailServError('adresse mail déjà utilisée! ')
       }
-      console.log(error.response.status)
+
       if (error.response.status === 401) {
         setMdpServError('Mot de passe non sécurisé !')
       }

@@ -76,7 +76,6 @@ export default function Modal({ publication }) {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    console.log(image)
     const post = {
       userId: user.userId,
       text: text.current.value,
@@ -87,9 +86,7 @@ export default function Modal({ publication }) {
     data.append('post', JSON.stringify(post))
 
     const tokenAcces = user.token
-    console.log(post.text)
     if (image) {
-      console.log('voilà mon text1', text.current.value)
       if (text.current.value === '') {
         const post = {
           userId: user.userId,
@@ -99,7 +96,6 @@ export default function Modal({ publication }) {
         const data = new FormData()
         data.append('image', image)
         data.append('post', JSON.stringify(post))
-        console.log('voilà ma daaaaaaaaataaaaaa', data)
         await axios
           .put('/publication/' + publication._id, data, {
             headers: {
@@ -111,11 +107,8 @@ export default function Modal({ publication }) {
             if (response.data.message) {
               window.location.reload()
             }
-            console.log(response.data.message)
           })
-          .catch((e) => {
-            console.log('Error: ', e.message)
-          })
+          .catch((e) => {})
       } else {
         await axios
           .put('/publication/' + publication._id, data, {
@@ -128,11 +121,8 @@ export default function Modal({ publication }) {
             if (response.data.message) {
               window.location.reload()
             }
-            console.log(response.data.message)
           })
-          .catch((e) => {
-            console.log('Error: ', e.message)
-          })
+          .catch((e) => {})
       }
     } else {
       await axios
@@ -146,14 +136,11 @@ export default function Modal({ publication }) {
           if (response.data.message) {
             window.location.reload()
           }
-          console.log(response.data.message)
         })
         .catch((e) => {
           console.log('Error: ', e.message)
         })
     }
-    console.log(image)
-    console.log(post)
   }
 
   return (

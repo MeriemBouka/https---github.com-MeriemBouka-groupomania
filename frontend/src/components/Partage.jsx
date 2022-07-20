@@ -116,7 +116,6 @@ export default function Partage() {
         if (response.data.message) {
           window.location.reload()
         }
-        console.log(response.data.message)
       })
       .catch((e) => {
         console.log('Error: ', e.message)
