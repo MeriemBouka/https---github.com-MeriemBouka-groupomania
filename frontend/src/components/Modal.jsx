@@ -1,6 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
 import styled from 'styled-components'
-import profileImg from '../../src/assets/profil.png'
 import { faImages } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import colors from '../utils/colors'
@@ -108,7 +107,9 @@ export default function Modal({ publication }) {
               window.location.reload()
             }
           })
-          .catch((e) => {})
+          .catch((e) => {
+            console.log(e)
+          })
       } else {
         await axios
           .put('/publication/' + publication._id, data, {
@@ -122,7 +123,9 @@ export default function Modal({ publication }) {
               window.location.reload()
             }
           })
-          .catch((e) => {})
+          .catch((e) => {
+            console.log(e)
+          })
       }
     } else {
       await axios

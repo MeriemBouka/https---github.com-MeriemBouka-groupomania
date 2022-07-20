@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const fs = require("fs");
 
+//Création du Post avec image
 exports.createPost = (req, res, next) => {
   const postObject = JSON.parse(req.body.post);
   delete postObject._id;
@@ -22,14 +23,19 @@ exports.getOnePost = (req, res, next) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
+// Mise à jour du post 
 exports.updatePost = (req, res, next) => {
   const postObject = req.file
+
+  //avec image
     ? {
         ...JSON.parse(req.body.post),
         imgUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
       }
+
+  //Sans image
     : { ...req.body };
 
     delete postObject._userId;
@@ -57,6 +63,7 @@ exports.updatePost = (req, res, next) => {
   
 };
 
+// Suppression du post
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
@@ -86,7 +93,6 @@ exports.deletePost = (req, res, next) => {
           .catch((error) => res.status(400).json({ error }));
       });
 }
-     
      } )
     .catch((error) => res.status(500).json({ error }));
 };
